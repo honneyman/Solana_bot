@@ -9,7 +9,10 @@ async def fetch_jupiter_tokens():
             response.raise_for_status()
             data = response.json()
 
-            # ✅ FIX: Check if data is a dict and contains "tokens"
+            # Log the raw response for debugging
+            logging.info(f"🔍 Raw data preview: {str(data)[:500]}")  # truncate to avoid huge logs
+
+            # Validate structure
             if isinstance(data, dict) and "tokens" in data:
                 tokens = list(data["tokens"].values())
                 logging.info(f"✅ Fetched {len(tokens)} tokens from Jupiter")
