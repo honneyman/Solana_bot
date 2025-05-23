@@ -2,24 +2,23 @@ import httpx
 import logging
 
 async def fetch_jupiter_tokens():
-    url = "https://quote-api.jup.ag/v6/tokens"
+    url = "https://token.jup.ag/all"  # Updated to correct endpoint
+
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
             response.raise_for_status()
             data = response.json()
 
-            # Log the raw response for debugging
-            logging.info(f"🔍 Raw data preview: {str(data)[:500]}")  # truncate to avoid huge logs
+            # Preview the raw data in logs (limit to 500 chars)
+            logging.info(f"🔍 Raw data preview: {str(data)[:500]}")
 
-            # Validate structure
-            if isinstance(data, dict) and "tokens" in data:
-                tokens = list(data["tokens"].values())
-                logging.info(f"✅ Fetched {len(tokens)} tokens from Jupiter")
-                return tokens
+            if isinstance(data, list) and isinstance(data[0], dict):
+                return data
             else:
-                logging.error("❌ Unexpected data format (not a dict or missing 'tokens')")
+                logging.error("❌ Unexpected data format (not a list of dicts)")
                 return []
+
     except Exception as e:
         logging.error(f"❌ Error fetching Jupiter tokens: {e}")
         return []
