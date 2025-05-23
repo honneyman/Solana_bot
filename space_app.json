@@ -1,0 +1,7 @@
+{
+  "name": "solana-alert-bot",
+  "type": "python",
+  "entrypoint": "bot.py",
+  "memory": 256,
+  "permissions": []
+}
